@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.0/ember.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.10/ember-data.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/x-handlebars" data-template-name="simple">
+			<p>Hello World (simple)!</p>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="test">
+			<p>Hello World (test)!</p>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="route">
+			<p>Hello World (route)!</p>
+		</script>
+
+		<script type="text/javascript">
+			var app = Ember.Application.create();
+
+			var router = app.Router.map(function() {
+				this.route("simple", { path: "/" });
+				this.resource("test", { path: "/test" });
+				this.route("route", { path: "/route" });
+			});
+
+			// If you're going to actually use the url like a normal person, you need this
+			app.Router.reopen({
+				location: "history"
+			});
+		</script>
+	</body>
+</html>
