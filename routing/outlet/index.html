@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.0/ember.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.10/ember-data.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/x-handlebars">
+			<p>Here is the header</p>
+			<hr>
+			{{outlet}}
+			<hr>
+			<p>Here is the footer</p>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="index">
+			<h2>OH BOI</h2>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="foo">
+			<h2>FOOOOOOO</h2>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="bar">
+			<h2>BAAAAAAAR</h2>
+		</script>
+
+		<script type="text/javascript">
+			window.Application = Ember.Application.create({
+				LOG_TRANSITIONS: true
+			});
+
+			Application.Router.reopen({
+				location: "history"
+			});
+
+			Application.Router.map(function() {
+				this.resource("foo", { path: "/foo" });
+				this.resource("bar", { path: "/bar" });
+			});
+		</script>
+	</body>
+</html>
