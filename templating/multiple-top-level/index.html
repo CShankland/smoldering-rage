@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.7.0/ember.js" charset="utf-8"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.10/ember-data.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/x-handlebars">
+			{{outlet "header"}}
+			<hr>
+			{{outlet}}
+			<hr>
+			{{outlet "footer"}}
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="header">
+			<h2>Header</h2>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="footer">
+			<h2>Footer</h2>
+		</script>
+
+		<script type="text/x-handlebars" data-template-name="baz">
+			<h2>BAZ</h2>
+		</script>		
+
+		<script type="text/javascript">
+			window.Application = Ember.Application.create({
+				LOG_TRANSITIONS: true
+			});
+
+			Application.Router.reopen({
+				location: "history"
+			});
+
+			Application.Router.map(function() {
+				this.resource("foo", { path: "/foo/:foo_id" }, function() {
+					this.resource("bar", { path: "/bar" });
+					this.route("baz", { path: "/baz/:baz_id"});
+				});
+			});
+
+			Application.HeaderController = Ember.ObjectController.extend();
+			Application.FooterController = Ember.ObjectController.extend();
+
+			Application.ApplicationRoute = Ember.Route.extend({
+				model: function applicationModel() {
+					console.debug("app model");
+				},
+				setupController: function setupController() {
+					console.debug("Application setup");
+					this
+						.controllerFor("header")
+						.set("model", Ember.Object.create({
+							id: 12,
+							type: "header"
+						}));
+
+					this
+						.controllerFor("footer")
+						.set("model", Ember.Object.create({
+							id: 25,
+							type: "footer"
+						}));
+				},
+				renderTemplate: function renderTemplate() {
+					console.debug("Application template");
+					this.render("header", {
+						into: "application",
+						outlet: "header"
+					});
+
+					this.render("footer", {
+						into: "application",
+						outlet: "footer"
+					});
+				}
+			});
+
+			Application.FooRoute = Ember.Route.extend({
+				model: function fooModel(params) {
+					console.debug("Foo: ", params);
+					return new Ember.RSVP.Promise(function (resolve) {
+						resolve(Ember.Object.create({
+							type: "foo",
+							id: params.foo_id
+						}));
+					});
+				}
+			});
+
+			Application.FooBazRoute = Ember.Route.extend({
+				model: function bazModel(params) {
+					console.debug("Baz: ", params);
+
+					var m = this.modelFor("foo");
+					console.debug("Foo: ", m);
+					return Ember.Object.create({
+						type: "baz",
+						id: params.baz_id
+					});
+				}
+			});
+
+			Application.BarRoute = Ember.Route.extend({
+				model: function barModel(params) {
+					console.debug("Bar: ", params);
+				}
+			});
+		</script>
+	</body>
+</html>
